@@ -1,6 +1,7 @@
 package routers
 
 import (
+	"html_api/middleware/Cors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -20,7 +21,7 @@ import (
 // InitRouter initialize routing information
 func InitRouter() *gin.Engine {
 	r := gin.New()
-	//r.Use(Cors.Cors())
+	r.Use(Cors.Cors())
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 
