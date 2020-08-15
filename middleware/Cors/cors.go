@@ -7,7 +7,7 @@ import (
 func Cors() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		method := c.Request.Method
-		_ := c.Request.Header.Get("Origin")
+		//_ := c.Request.Header.Get("Origin")
 		//if origin != "" {
 			c.Header("Access-Control-Allow-Origin", "*")
 			c.Header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, UPDATE")
