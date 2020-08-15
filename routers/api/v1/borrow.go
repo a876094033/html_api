@@ -4,6 +4,7 @@ import (
 	"github.com/Unknwon/com"
 	_ "github.com/astaxie/beego/validation"
 	"github.com/gin-gonic/gin"
+	"html_api/models"
 	"html_api/pkg/app"
 	"html_api/pkg/e"
 	"html_api/pkg/setting"
@@ -34,9 +35,28 @@ func GetBorrows(c *gin.Context) {
 		appG.Response(http.StatusInternalServerError, e.ERROR_GET_BORROW_FAIL, nil)
 		return
 	}
+
+	//var borrowAll []models.BorrowAll
+	borrowAll := make([]models.BorrowAll, total)
+	for i, v := range borrows {
+		borrowAll[i].ID = v.ID
+		borrowAll[i].Term = v.Term
+		borrowAll[i].BorrowStatus = v.BorrowStatus
+		borrowAll[i].BorrowName = v.BorrowName
+		borrowAll[i].RepayType = v.RepayType
+		borrowAll[i].Amount = v.Amount
+		borrowAll[i].AmountLimit = v.AmountLimit
+		borrowAll[i].Purpose = v.Purpose
+		borrowAll[i].RepayName = v.RepayName
+		borrowAll[i].Diya = v.Diya
+		borrowAll[i].TermType = v.TermType
+		borrowAll[i].InterestRate = v.InterestRate
+		borrowAll[i].InvestCount = models.GetInvestCount(v.ID)
+		borrowAll[i].InvestSum = v.Amount - v.AmountLimit
+	}
 	data := make(map[string]interface{})
 	data["total"] = total
-	data["list"] = borrows
+	data["list"] = borrowAll
 	appG.Response(http.StatusOK, e.SUCCESS, data)
 }
 

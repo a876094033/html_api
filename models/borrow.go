@@ -10,13 +10,17 @@ type Borrow struct {
 	TermType     int     `json:"term_type"`
 	Amount       float64 `json:"amount"`
 	RepayType    int     `json:"repay_type"`
-	purpose      string  `json:"purpose"`
+	Purpose      string  `json:"purpose"`
 	RepayName    string  `json:"repay_name"`
 	Diya         string  `json:"diya"`
 	AmountLimit  float64 `json:"amount_limit"`
 	BorrowStatus int     `json:"borrow_status"`
 }
-
+type BorrowAll struct {
+	Borrow
+	InvestCount int
+	InvestSum float64
+}
 func GetBorrows(pageNum int, pageSize int, maps interface{})([]*Borrow, error) {
 	var borrows []*Borrow
 	err := db.Debug().Model(&Borrow{}).Where(maps).Where("borrow_status <> ?", 1).Offset(pageNum).Limit(pageSize).Find(&borrows).Error
