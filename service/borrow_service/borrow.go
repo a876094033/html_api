@@ -31,8 +31,9 @@ func (b *Borrow) GetBorrows() ([]*models.Borrow, error) {
 		borrow, cacheBorrow []*models.Borrow
 	)
 	cache := cache_service.Borrow{
-		PageNum:  b.PageNum,
-		PageSize: b.PageSize,
+		PageNum:      b.PageNum,
+		PageSize:     b.PageSize,
+		BorrowStatus: b.BorrowStatus,
 	}
 	key := cache.GetBorrowsKey()
 	if gredis.Exists(key) {
@@ -57,7 +58,7 @@ func (b *Borrow) GetBorrows() ([]*models.Borrow, error) {
 func (b *Borrow) Count() (int, error) {
 	return models.GetBorrowTotal(b.getMaps())
 }
-func (b *Borrow) GetBorrow()(*models.Borrow, error) {
+func (b *Borrow) GetBorrow() (*models.Borrow, error) {
 	return models.GetBorrow(b.ID)
 }
 func (b *Borrow) getMaps() map[string]interface{} {
@@ -78,7 +79,7 @@ func (b *Borrow) GetBorrowsRepay() ([]*models.Borrow, error) {
 	var (
 		borrow []*models.Borrow
 	)
-	borrow, err := models.GetBorrowsRepay( b.getMaps())
+	borrow, err := models.GetBorrowsRepay(b.getMaps())
 	if err != nil {
 		return nil, err
 	}
