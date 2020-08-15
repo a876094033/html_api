@@ -16,6 +16,7 @@ import (
 )
 
 func init() {
+	engine.Use(Cors())
 	setting.Setup()
 	models.Setup()
 	logging.Setup()
@@ -32,7 +33,7 @@ var (
 // @license.name MIT
 // @license.url https://github.com/EDDYCJY/go-gin-example/blob/master/LICENSE
 func main() {
-	engine.Use(Cors())
+
 	gin.SetMode(setting.ServerSetting.RunMode)
 
 	routersInit := routers.InitRouter()
