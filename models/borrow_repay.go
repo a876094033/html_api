@@ -1,5 +1,7 @@
 package models
 
+import "github.com/jinzhu/gorm"
+
 type BorrowRepay struct {
 	ID            int     `json:"id" gorm:"primary_key"`
 	BorrowId      int     `json:"borrow_name"`
@@ -23,4 +25,13 @@ func AddBorrowRepay(data map[string]interface{}) error {
 		return err
 	}
 	return nil
+}
+
+func GetBorrowRepays(id int) ([]*BorrowRepay, error) {
+	var borrowRepay []*BorrowRepay
+	err := db.Debug().Where("borrow_id = ?", id).Find(&borrowRepay).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return nil, err
+	}
+	return borrowRepay, nil
 }

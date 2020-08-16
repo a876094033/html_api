@@ -6,6 +6,8 @@ import (
 	"html_api/pkg/e"
 	"html_api/service/auth_service"
 	"html_api/service/invest_service"
+	"html_api/service/repay_service"
+	"math"
 	"net/http"
 )
 
@@ -32,6 +34,20 @@ type InvestList struct {
 	Page     int `form:"page"`
 }
 
+type investAll struct {
+	ID              int
+	BorrowName      string
+	BorrowStatus    int
+	InterestRate    float64
+	InvestAmount    float64
+	Term            int
+	TermType        int
+	RepayTime       string
+	RepayAmount     float64
+	RepayAmountWait float64
+	RepayTerm       int
+}
+
 func MemberInvest(c *gin.Context) {
 	var (
 		appG = app.Gin{c}
@@ -53,7 +69,42 @@ func MemberInvest(c *gin.Context) {
 			return
 		}
 	}
-	appG.Response(http.StatusOK, e.SUCCESS, investList)
+	investAll := make([]investAll, form.PageSize)
+	if len(investList) > 0 {
+		for i, v := range investList {
+			investAll[i].BorrowStatus = v.BorrowStatus
+			investAll[i].BorrowName = v.BorrowName
+			investAll[i].Term = v.Term
+			investAll[i].ID = v.ID
+			investAll[i].InterestRate = v.InterestRate
+			investAll[i].InvestAmount = math.Ceil(v.InvestAmount)
+			investAll[i].TermType = v.TermType
+			//获取借款列表
+			repay := repay_service.BorrowRepay{
+				BorrowId: v.BorrowId,
+			}
+			repays, err := repay.GetBorrowRepays()
+			var capital float64
+			if err == nil {
+				for _, va := range repays {
+					investAll[i].RepayAmount += va.Capital + va.Interest
+					if va.RepayStatus == 0 {
+						capital += va.Capital
+						investAll[i].RepayAmountWait += va.Capital + va.Interest
+						if va.Period > investAll[i].RepayTerm && investAll[i].RepayTerm <= 0{
+							investAll[i].RepayTerm = va.Period
+							investAll[i].RepayTime = Substr(va.RepayTime, 0, 10)
+						}
+					}
+
+				}
+			}
+			investAll[i].RepayAmountWait = math.Ceil(v.InvestAmount/capital*investAll[i].RepayAmountWait)
+			investAll[i].RepayAmount = math.Ceil(v.InvestAmount/capital*investAll[i].RepayAmount)
+
+		}
+	}
+	appG.Response(http.StatusOK, e.SUCCESS, investAll)
 }
 
 func GetMemberInfo(c *gin.Context) {
@@ -72,4 +123,30 @@ func GetMemberInfo(c *gin.Context) {
 	}
 
 	appG.Response(http.StatusOK, e.SUCCESS, memberInfo)
+}
+
+func Substr(str string, start, length int) string {
+	if length == 0 {
+		return ""
+	}
+	rune_str := []rune(str)
+	len_str := len(rune_str)
+
+	if start < 0 {
+		start = len_str + start
+	}
+	if start > len_str {
+		start = len_str
+	}
+	end := start + length
+	if end > len_str {
+		end = len_str
+	}
+	if length < 0 {
+		end = len_str + length
+	}
+	if start > end {
+		start, end = end, start
+	}
+	return string(rune_str[start:end])
 }

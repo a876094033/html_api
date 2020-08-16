@@ -27,6 +27,7 @@ type InvestList struct {
 	Term         int
 	BorrowStatus int
 	TermType     int
+	BorrowId     int
 }
 
 func GetInvestList(member_id, page, page_size int) ([]*InvestList, error) {
@@ -41,6 +42,7 @@ func GetInvestCount(borrow_id int) (count int) {
 	db.Where("borrow_id = ?", borrow_id).Count(&count)
 	return
 }
+
 //func GetInvestSum(borrow_id int) (sum float64) {
 //	db.Debug().Select("sum(id) as sum").Where("borrow_id = ?", borrow_id).First(&sum)
 //	return sum

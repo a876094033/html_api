@@ -20,15 +20,14 @@ func GetBorrows(c *gin.Context) {
 		pageSize = setting.AppSetting.PageSize
 	}
 	borrowStatus := com.StrTo(c.Query("borrow_status")).MustInt()
-	if  borrowStatus == 0{
-		appG.Response(http.StatusInternalServerError, e.ERROR_COUNT_BORROW_FAIL, nil)
-		return
-	}
+
 	//valid := validation.Validation{}
 	borrowService := borrow_service.Borrow{
 		PageNum:  util.GetPage(c),
 		PageSize: pageSize,
-		BorrowStatus: borrowStatus,
+	}
+	if borrowStatus > 1 {
+		borrowService.BorrowStatus = borrowStatus
 	}
 	total, err := borrowService.Count()
 	if err != nil {

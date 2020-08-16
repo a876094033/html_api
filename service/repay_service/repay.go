@@ -26,3 +26,7 @@ func (b *BorrowRepay) AddBorrowRepay() error {
 	}
 	return models.AddBorrowRepay(borrowRepay)
 }
+
+func (b *BorrowRepay) GetBorrowRepays() ([]*models.BorrowRepay, error) {
+	return models.GetBorrowRepays(b.BorrowId)
+}

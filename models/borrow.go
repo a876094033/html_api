@@ -15,13 +15,15 @@ type Borrow struct {
 	Diya         string  `json:"diya"`
 	AmountLimit  float64 `json:"amount_limit"`
 	BorrowStatus int     `json:"borrow_status"`
+	Ramerk       string  `json:"ramerk"`
 }
 type BorrowAll struct {
 	Borrow
 	InvestCount int
-	InvestSum float64
+	InvestSum   float64
 }
-func GetBorrows(pageNum int, pageSize int, maps interface{})([]*Borrow, error) {
+
+func GetBorrows(pageNum int, pageSize int, maps interface{}) ([]*Borrow, error) {
 	var borrows []*Borrow
 	err := db.Debug().Model(&Borrow{}).Where(maps).Where("borrow_status <> ?", 1).Offset(pageNum).Limit(pageSize).Find(&borrows).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
@@ -30,9 +32,9 @@ func GetBorrows(pageNum int, pageSize int, maps interface{})([]*Borrow, error) {
 	return borrows, nil
 }
 
-func GetBorrowTotal(maps interface{})(int,  error) {
+func GetBorrowTotal(maps interface{}) (int, error) {
 	var count int
-	if err := db.Model(&Borrow{}).Where(maps).Where("borrow_status <> ?", 1).Count(&count).Error; err != nil {
+	if err := db.Debug().Model(&Borrow{}).Where(maps).Where("borrow_status <> ?", 1).Count(&count).Error; err != nil {
 		return 0, err
 	}
 	return count, nil
@@ -54,7 +56,7 @@ func Update(id int, AmountLimit float64) error {
 	return nil
 }
 
-func GetBorrowsRepay(maps interface{})([]*Borrow, error) {
+func GetBorrowsRepay(maps interface{}) ([]*Borrow, error) {
 	var borrows []*Borrow
 	err := db.Debug().Model(&Borrow{}).Where(maps).Find(&borrows).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
