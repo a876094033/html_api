@@ -42,7 +42,7 @@ func GetBorrows(c *gin.Context) {
 	}
 
 	//var borrowAll []models.BorrowAll
-	borrowAll := make([]models.BorrowAll, total)
+	borrowAll := make([]models.BorrowAll, len(borrows))
 	for i, v := range borrows {
 		borrowAll[i].ID = v.ID
 		borrowAll[i].Term = v.Term

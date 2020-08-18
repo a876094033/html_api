@@ -14,6 +14,7 @@ type RegisterForm struct {
 	ReEmail    string `form:"re_email" json:"re_email" valid:"Required; Email; MaxSize(100)"`
 	Password   string `form:"password" json:"password" valid:"Required; MinSize(8); MaxSize(20)"`
 	RePassword string `form:"re_password" json:"re_password" valid:"Required; MinSize(8); MaxSize(20)"`
+	InviteCode string `form:"invite_code" json:"invite_code"`
 }
 
 func Register(c *gin.Context) {
@@ -31,6 +32,9 @@ func Register(c *gin.Context) {
 	register := register_service.Register{
 		Email:    form.Email,
 		Password: form.Password,
+	}
+	if len(form.InviteCode) > 0 {
+		register.InviteCode = form.InviteCode
 	}
 	//检测邮箱是否被注册
 	member_id := register.CheckEmail()

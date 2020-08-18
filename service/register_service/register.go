@@ -6,14 +6,16 @@ import (
 )
 
 type Register struct {
-	Email    string
-	Password string
+	Email      string
+	Password   string
+	InviteCode string
 }
 
 func (r *Register) Add() int {
 	register := map[string]interface{}{
-		"email":    r.Email,
-		"password": util.EncodeMD5(r.Password),
+		"email":       r.Email,
+		"password":    util.EncodeMD5(r.Password),
+		"invite_code": r.InviteCode,
 	}
 	member_id := models.AddMember(register)
 	if member_id <= 0 {

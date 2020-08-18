@@ -25,11 +25,15 @@ type BorrowAll struct {
 
 func GetBorrows(pageNum int, pageSize int, maps interface{}) ([]*Borrow, error) {
 	var borrows []*Borrow
-	err := db.Debug().Model(&Borrow{}).Where(maps).Where("borrow_status <> ?", 1).Offset(pageNum).Limit(pageSize).Find(&borrows).Error
+	err := db.Debug().Model(&Borrow{}).Where(maps).Where("borrow_status<>?", 1).Offset(pageNum/10*pageSize).Limit(pageSize).Find(&borrows).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, err
 	}
 	return borrows, nil
+}
+
+func (Borrow) TableName() string {
+	return "borrow"
 }
 
 func GetBorrowTotal(maps interface{}) (int, error) {

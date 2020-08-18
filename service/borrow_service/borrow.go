@@ -66,9 +66,9 @@ func (b *Borrow) getMaps() map[string]interface{} {
 	if b.BorrowStatus > 0 {
 		maps["borrow_status"] = b.BorrowStatus
 	}
-	if b.AmountLimit >= 0 {
-		maps["amount_limit"] = b.AmountLimit
-	}
+	//if b.AmountLimit >= 0 {
+	//	maps["amount_limit"] = b.AmountLimit
+	//}
 	return maps
 }
 

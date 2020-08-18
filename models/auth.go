@@ -7,10 +7,12 @@ import (
 )
 
 type Auth struct {
-	ID       int `gorm:"primary_key" json:"id"`
-	Name string `json:"name"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	ID           int    `gorm:"primary_key" json:"id"`
+	Name         string `json:"name"`
+	Email        string `json:"email"`
+	Password     string `json:"password"`
+	InviteCode   string `json:"invite_code"`
+	MyInviteCode string `json:"my_invite_code"`
 }
 
 func (Auth) TableName() string {
@@ -47,10 +49,13 @@ func CheckEmail(email string) int {
 
 func AddMember(data map[string]interface{}) int {
 	username := RandInt(1000000000, 999999999)
+	myInviteCode := RandInt(100000, 999999)
 	auth := Auth{
-		Name: strconv.Itoa(username),
-		Email:    data["email"].(string),
-		Password: data["password"].(string),
+		Name:         strconv.Itoa(username),
+		Email:        data["email"].(string),
+		Password:     data["password"].(string),
+		InviteCode:   data["invite_code"].(string),
+		MyInviteCode: strconv.Itoa(myInviteCode),
 	}
 	if err := db.Create(&auth).Error; err != nil {
 		return 0
