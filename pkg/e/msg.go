@@ -29,6 +29,10 @@ var MsgFlags = map[int]string{
 
 	//脚本
 	ERROR_BORROW_REPAY_CREATE_NONE: "获取满标的借款失败",
+
+	ERROR_ARTICLE_TOTAL_FAILED: "获取文章总数失败",
+	ERROR_ARTICLE_LIST_FAILED:  "获取文章列表失败",
+	ERROR_ARTICLE_INFO_FAILED:  "获取文章信息失败",
 }
 
 func GetMsg(code int) string {
