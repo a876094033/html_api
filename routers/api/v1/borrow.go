@@ -58,6 +58,7 @@ func GetBorrows(c *gin.Context) {
 		borrowAll[i].InterestRate = v.InterestRate
 		borrowAll[i].InvestCount = models.GetInvestCount(v.ID)
 		borrowAll[i].InvestSum = v.Amount - v.AmountLimit
+		borrowAll[i].BorrowImg = v.BorrowImg
 	}
 	data := make(map[string]interface{})
 	data["total"] = total

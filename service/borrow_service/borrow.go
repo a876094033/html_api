@@ -21,6 +21,7 @@ type Borrow struct {
 	Diya         string
 	AmountLimit  float64
 	BorrowStatus int
+	BorrowImg    string
 
 	PageNum  int
 	PageSize int

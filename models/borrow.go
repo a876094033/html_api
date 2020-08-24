@@ -16,6 +16,7 @@ type Borrow struct {
 	AmountLimit  float64 `json:"amount_limit"`
 	BorrowStatus int     `json:"borrow_status"`
 	Ramerk       string  `json:"ramerk"`
+	BorrowImg    string  `json:"borrow_img"`
 }
 type BorrowAll struct {
 	Borrow
