@@ -46,6 +46,7 @@ func InitRouter() *gin.Engine {
 	apiv1.POST("/repaycreate", v1.Repay)
 	apiv1.POST("/article", v1.GetArticles)
 	apiv1.POST("/getarticle", v1.GetArticle)
+	apiv1.POST("/getborrowsummary", v1.GetBorrowSummary)
 	apiv1.Use(jwt.JWT())
 	{
 
